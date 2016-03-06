@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>EventSource example</title>
+    <script>
+		var evtSource = new EventSource("/events"); 
+
+		evtSource.onmessage = function(e) {
+  			var newElement = document.createElement("li");
+ 			newElement.innerHTML = "message: " + e.data;
+			document.getElementById("list").appendChild(newElement);
+		}
+    </script>
+</head>
+<body>
+	<ul id="list"></ul>
+</body>
+</html>
