@@ -5,20 +5,19 @@ open Suave.EventSource
 open Suave.Files
 open Suave.Sockets.Control
 
+let sendMessage out =
+   socket {
+        let msg = { id = "1"; data = "First Message"; ``type`` = None }
+        do! msg |> send out
+
+        do! send out <| mkMessage "2" "Second message"
+    } 
 
 let app = 
-    choose [ 
-        GET >=> choose [
-            path "/events" >=> request (fun r -> EventSource.handShake(fun out ->
-                socket {
-                    let msg = { id = "1"; data = "First Message"; ``type`` = None }
-                    do! msg |> send out
-                }))
-            browseHome 
-        ]
-    ]
+    GET >=> choose [ path "/"       >=> file    (__SOURCE_DIRECTORY__ + "/index.html")
+                     path "/events" >=> request (fun _ -> EventSource.handShake sendMessage) ]
 
 [<EntryPoint>]
 let main argv = 
-    startWebServer { defaultConfig with homeFolder = Some __SOURCE_DIRECTORY__ } app
+    startWebServer defaultConfig app
     0
