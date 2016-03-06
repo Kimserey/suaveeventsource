@@ -11,7 +11,6 @@
     <script>
 	var evtSource = new EventSource("/events"); 
 
-	var list = 
 	evtSource.onmessage = function(e) {
 		var newElement = document.createElement("li");
 		var txt = "message: " + e.data;
