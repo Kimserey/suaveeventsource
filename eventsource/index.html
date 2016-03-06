@@ -3,17 +3,28 @@
 <head>
     <meta charset="utf-8" />
     <title>EventSource example</title>
-    <script>
-	var evtSource = new EventSource("/events"); 
-
-	evtSource.onmessage = function(e) {
-		var newElement = document.createElement("li");
-		newElement.innerHTML = "message: " + e.data;
-		document.getElementById("list").appendChild(newElement);
-	}
-    </script>
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 </head>
 <body>
 	<ul id="list"></ul>
+	<button id="test-btn">Test</button>
+    <script>
+	var evtSource = new EventSource("/events"); 
+
+	var list = 
+	evtSource.onmessage = function(e) {
+		var newElement = document.createElement("li");
+		var txt = "message: " + e.data;
+		$("#list").append("<li>" + txt + "</li>");
+	}
+
+	$("#test-btn").click(function(){
+		$.ajax({
+		  url: "test"
+		}).done(function(data) {
+		  $("#list").append("<li>" + data + "</li>");
+		});
+	});
+    </script>
 </body>
 </html>
